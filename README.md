@@ -46,10 +46,8 @@ uv run server.py
 
 ### 3. Set up the client
 
-Open a new terminal:
-
 ```sh
-cd mcp/mcp_client
+cd mcp_client
 python -m venv .venv
 source .venv/bin/activate
 uv pip install -r requirements.txt
