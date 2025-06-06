@@ -1,7 +1,5 @@
-import re
 import secrets
 import string
-from typing import Literal
 
 def count_words(text: str) -> dict:
     """

@@ -1,6 +1,5 @@
-from datetime import datetime, date
-from typing import Literal
 import pytz
+from datetime import datetime, date
 
 def calculate_age(birth_date: str) -> dict:
     """

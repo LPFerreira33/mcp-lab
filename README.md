@@ -16,6 +16,7 @@ mcp/
 │       └── ...
 ├── mcp_client/      # MCP client implementation
 │   ├── client.py
+│   ├── client_llm.py
 │   ├── requirements.txt
 │   ├── README.md
 │   └── .env
@@ -49,7 +50,7 @@ uv run server.py
 ```sh
 cd mcp_client
 python -m venv .venv
-source .venv/bin/activate
+.venv\Scripts\activate
 uv pip install -r requirements.txt
 # Edit .env to match your server's IP and port if needed
 python client.py
