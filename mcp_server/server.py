@@ -1,11 +1,11 @@
 import logging
+import inspect
+import importlib
+import pkgutil
+
 from mcp.server.fastmcp import FastMCP
 
-# Import tools from separate modules
-import inspect
-import tools.conversion_tools as conversion_tools
-import tools.text_tools as text_tools
-import tools.utility_tools as utility_tools
+import tools
 
 
 # Simple logging setup
@@ -20,9 +20,13 @@ mcp = FastMCP(
     port=8050,
 )
 
-
-# List of modules to scan for tool functions
-tool_modules = [conversion_tools, text_tools, utility_tools]
+# Dynamically import all modules in the 'tools' package
+tool_modules = []
+for _, module_name, is_pkg in pkgutil.iter_modules(tools.__path__):
+    if not is_pkg:
+        module = importlib.import_module(f"tools.{module_name}")
+        tool_modules.append(module)
+        logger.info(f"Imported tool module: {module_name}")
 
 # Dynamically register all functions from the tool modules
 for module in tool_modules:
@@ -34,7 +38,6 @@ def main():
     """Run the MCP server."""
     try:
         logger.info("Starting Utility Toolkit MCP server on port 8050")
-        logger.info("Available tools: length converter, temperature converter, currency converter, word counter, password generator, age calculator, timezone info")
         mcp.run(transport="sse")
     except KeyboardInterrupt:
         logger.info("Server stopped (KeyboardInterrupt)")
