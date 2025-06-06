@@ -9,7 +9,7 @@ This directory contains a sample MCP client for connecting to an MCP server.
 1. **Create and activate a virtual environment:**
     ```sh
     python -m venv .venv
-    source .venv/bin/activate
+    .venv\Scripts\activate
     ```
 
 2. **Install dependencies:**

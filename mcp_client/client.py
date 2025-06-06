@@ -1,11 +1,8 @@
+import os
 import asyncio
-import nest_asyncio
 from mcp import ClientSession
 from mcp.client.sse import sse_client
 from dotenv import load_dotenv
-import os
-
-nest_asyncio.apply()  # Needed to run interactive python
 
 # Load environment variables from .env file
 load_dotenv()
