@@ -16,7 +16,9 @@ load_dotenv()
 
 
 SERVER_IP = os.getenv("SERVER_IP", "localhost") # Default to localhost if not set
-SERVER_PORT = os.getenv("SERVER_PORT", "8050")
+SERVER_PORT = os.getenv("SERVER_PORT", "3312")
+
+MODEL = os.getenv("MODEL", "hf.co/unsloth/Qwen3-30B-A3B-GGUF:Q4_K_M")  # Default model if not set
 
 # Global variables to store session state
 session = None
@@ -102,7 +104,7 @@ async def process_query(query: str) -> str:
     
     
     response = ollama.chat(
-            model='hf.co/unsloth/Qwen3-30B-A3B-GGUF:Q4_K_M',
+            model=MODEL,
             messages=[
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': query},
@@ -133,7 +135,7 @@ async def process_query(query: str) -> str:
         f"{tool_results}"
     )
     response = ollama.chat(
-            model='hf.co/unsloth/Qwen3-30B-A3B-GGUF:Q4_K_M',
+            model=MODEL,
             messages=[
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': query},

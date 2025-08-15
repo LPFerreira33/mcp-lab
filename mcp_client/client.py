@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 SERVER_IP = os.getenv("SERVER_IP", "localhost") # Default to localhost if not set
-SERVER_PORT = os.getenv("SERVER_PORT", "8050")
+SERVER_PORT = os.getenv("SERVER_PORT", "3312")
 
 async def main():
     # Connect to the server using SSE

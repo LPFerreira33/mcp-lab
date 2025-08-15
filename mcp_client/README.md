@@ -10,6 +10,7 @@ This directory contains a sample MCP client for connecting to an MCP server.
     ```sh
     python -m venv .venv
     .venv\Scripts\activate
+    # source ./.venv/bin/activate  # linux
     ```
 
 2. **Install dependencies:**
@@ -25,7 +26,7 @@ Create a `.env` file in this directory with the following content (replace with 
 
 ```
 SERVER_IP=your_server_ip_here
-SERVER_PORT=8050
+SERVER_PORT=3312
 ```
 
 **Note:**  
