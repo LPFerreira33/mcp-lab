@@ -22,7 +22,7 @@ def load_config():
     return {
         "SERVER_IP": os.getenv("SERVER_IP", "localhost"),
         "SERVER_PORT": os.getenv("SERVER_PORT", "3312"),
-        "MODEL": os.getenv("MODEL", "hf.co/unsloth/Phi-4-mini-instruct-GGUF:Q4_K_M"),
+        "MODEL": os.getenv("MODEL", "hf.co/unsloth/gemma-4-E2B-it-GGUF:Q4_0"),
     }
 
 config = load_config()
@@ -104,7 +104,8 @@ async def get_llm_tool_json(query: str, try_extract_json: bool = False) -> dict 
         messages=[
             {'role': 'system', 'content': system_prompt},
             {'role': 'user', 'content': query},
-        ]
+        ],
+        think=False,
     )
     print("Response from model:", response['message']['content'])
 
@@ -199,20 +200,25 @@ async def execute_toolcall(request: ToolCallRequest):
 
 async def main():
     """
-    Main entry point for the client. Connects to the server, processes a sample query, and cleans up resources.
+    Main entry point for the client. Connects to the server, processes a sample query, 
+    times the operation, and cleans up resources.
     """
+    # Start the timer
+    start_time = time.time()
+    print("⏱️ Timer started...")
+
     await connect_to_server()
 
-    # query = "Add Canned Tuna with replacement date in 25th June 2025 and expiration date in 25th June 2025 into storage named Bunker 101"
+    # Your sample query
     query = "Adiciona Pao com data de substituição a 25 de Junho de 2025 e data de validade a 26 de Junho de 2025 no armazemento: mochila do Joao"
-    # query = "Edita item com id 21 para data de validade a 26 de Junho de 2025"
-    # query = "Remove item com id 21"
     print(f"\nQuery: {query}")
     
     tools_json = await get_llm_tool_json(query)
     
     if not isinstance(tools_json, dict):
-        return tools_json  # Return raw response if not valid JSON
+        print("Model did not return a valid JSON tool call.")
+        await cleanup()
+        return tools_json 
     
     response = await call_tools_with_json(tools_json)
     
@@ -220,5 +226,23 @@ async def main():
 
     await cleanup()
 
+    # Stop the timer and print results
+    elapsed_time = time.time() - start_time
+    print("\n" + "="*40)
+    print(f"🏁 Execution finished!")
+    print(f"⏱️ Total Elapsed Time: {elapsed_time:.2f} seconds")
+    print("="*40)
+
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=3313)
+    import sys
+    import asyncio
+
+    # Check if we want to run the standalone test script
+    if len(sys.argv) > 1 and sys.argv[1] in ["--test", "main"]:
+        print(" Bypassing server. Running standalone main()...\n")
+        asyncio.run(main())
+    
+    # If no arguments are passed, run the FastAPI web server instead
+    else:
+        print("Starting FastAPI Server...")
+        uvicorn.run(app, host="0.0.0.0", port=3313)
