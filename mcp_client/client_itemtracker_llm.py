@@ -22,7 +22,7 @@ def load_config():
     return {
         "SERVER_IP": os.getenv("SERVER_IP", "localhost"),
         "SERVER_PORT": os.getenv("SERVER_PORT", "3312"),
-        "MODEL": os.getenv("MODEL", "hf.co/unsloth/gemma-4-E2B-it-GGUF:Q4_0"),
+        "MODEL": os.getenv("MODEL", "gemma4:e2b-it-qat"),
     }
 
 config = load_config()
